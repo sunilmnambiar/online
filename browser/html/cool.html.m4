@@ -19,27 +19,30 @@ m4_ifelse(IOSAPP,[true],
 <meta name="previewImg" content="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAyMDAgMjAwJz4KICAgPGNpcmNsZSB0cmFuc2Zvcm09J3JvdGF0ZSgwKScgdHJhbnNmb3JtLW9yaWdpbj0nY2VudGVyJyBmaWxsPSdub25lJyBzdHJva2U9JyNCNkI2QjYnIHN0cm9rZS13aWR0aD0nMTUnIHN0cm9rZS1saW5lY2FwPSdyb3VuZCcgc3Ryb2tlLWRhc2hhcnJheT0nMjMwIDEwMDAnIHN0cm9rZS1kYXNob2Zmc2V0PScwJyBjeD0nMTAwJyBjeT0nMTAwJyByPSc3MCc+CiAgICAgPGFuaW1hdGVUcmFuc2Zvcm0KICAgICAgICAgYXR0cmlidXRlTmFtZT0ndHJhbnNmb3JtJwogICAgICAgICB0eXBlPSdyb3RhdGUnCiAgICAgICAgIGZyb209JzAnCiAgICAgICAgIHRvPSczNjAnCiAgICAgICAgIGR1cj0nMicKICAgICAgICAgcmVwZWF0Q291bnQ9J2luZGVmaW5pdGUnPgogICAgICA8L2FuaW1hdGVUcmFuc2Zvcm0+CiAgIDwvY2lyY2xlPgo8L3N2Zz4=">
 <meta name="previewSmile" content="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjRweCIgdmlld0JveD0iMCAtOTYwIDk2MCA5NjAiIHdpZHRoPSIyNHB4IiBmaWxsPSIjNWY2MzY4Ij48cGF0aCBkPSJtNDI0LTI5NiAyODItMjgyLTU2LTU2LTIyNiAyMjYtMTE0LTExNC01NiA1NiAxNzAgMTcwWm01NiAyMTZxLTgzIDAtMTU2LTMxLjVUMTk3LTE5N3EtNTQtNTQtODUuNS0xMjdUODAtNDgwcTAtODMgMzEuNS0xNTZUMTk3LTc2M3E1NC01NCAxMjctODUuNVQ0ODAtODgwcTgzIDAgMTU2IDMxLjVUNzYzLTc2M3E1NCA1NCA4NS41IDEyN1Q4ODAtNDgwcTAgODMtMzEuNSAxNTZUNzYzLTE5N3EtNTQgNTQtMTI3IDg1LjVUNDgwLTgwWm0wLTgwcTEzNCAwIDIyNy05M3Q5My0yMjdxMC0xMzQtOTMtMjI3dC0yMjctOTNxLTEzNCAwLTIyNyA5M3QtOTMgMjI3cTAgMTM0IDkzIDIyN3QyMjcgOTNabTAtMzIwWiIvPjwvc3ZnPg==">
 
-<script>
 m4_dnl# Define MOBILEAPP as true if this is either for the iOS app or for the gtk+ "app" testbed
 m4_define([MOBILEAPP],[])
 m4_ifelse(IOSAPP,[true],[m4_define([MOBILEAPP],[true])])
 m4_ifelse(GTKAPP,[true],[m4_define([MOBILEAPP],[true])])
 m4_ifelse(ANDROIDAPP,[true],[m4_define([MOBILEAPP],[true])])
 
-// FIXME: This is temporary and not what we actually eventually want.
-
-// What we really want is not a separate HTML file (produced with M4 conditionals on the below
-// EMSCRIPTENAPP) for a "WASM app". What we want is that the same cool.html page adapts on demand to
-// instead run locally using WASM, if the connection to the COOL server breaks. (And then
-// re-connects to the COOL server when possible.)
+m4_dnl# FIXME: This is temporary and not what we actually eventually want.
+m4_dnl# What we really want is not a separate HTML file (produced with M4 conditionals on the below
+m4_dnl# EMSCRIPTENAPP) for a "WASM app". What we want is that the same cool.html page adapts on demand to
+m4_dnl# instead run locally using WASM, if the connection to the COOL server breaks. (And then
+m4_dnl# re-connects to the COOL server when possible.)
 
 m4_ifelse(EMSCRIPTENAPP,[true],[m4_define([MOBILEAPP],[true])])
 
-m4_ifelse(MOBILEAPP,[],
-  window.welcomeUrl = '%WELCOME_URL%';
-  window.feedbackUrl = '%FEEDBACK_URL%';
-  window.buyProductUrl = '%BUYPRODUCT_URL%';
+m4_ifelse(MOBILEAPP, [],
+  <input type="hidden" id="init-welcome-url" value="%WELCOME_URL%" />
+  <input type="hidden" id="init-feedback-url" value="%FEEDBACK_URL%" />
+  <input type="hidden" id="init-buy-product-url" value="%BUYPRODUCT_URL%" />
+  <input type="hidden" id="init-app-type" value="browser" />
+)
 
+<script>
+
+m4_ifelse(MOBILEAPP,[],
   // Start listening for Host_PostmessageReady message and save the
   // result for future
   window.WOPIpostMessageReady = false;

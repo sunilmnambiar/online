@@ -10,6 +10,11 @@ window.app = {
 	console: {}
 };
 
+window.welcomeUrl = document.getElementById("init-welcome-url").value;
+window.feedbackUrl = document.getElementById("init-feedback-url").value;
+window.buyProductUrl = document.getElementById("init-buy-product-url").value;
+window.appType = document.getElementById("init-app-type").value;
+
 (function (global) {
 
 	global.logServer = function (log) {
