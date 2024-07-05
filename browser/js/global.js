@@ -1,5 +1,5 @@
 /* -*- js-indent-level: 8 -*- */
-/* global Uint8Array _ */
+/* global app ArrayBuffer Uint8Array _ */
 
 /*
 	For extending window.app object, please see "docstate.js" file.
@@ -10,12 +10,223 @@ window.app = {
 	console: {}
 };
 
-window.welcomeUrl = document.getElementById("init-welcome-url").value;
-window.feedbackUrl = document.getElementById("init-feedback-url").value;
-window.buyProductUrl = document.getElementById("init-buy-product-url").value;
-window.appType = document.getElementById("init-app-type").value;
+// This function may look unused, but it's needed in WASM and Android to send data through the fake websocket. Please
+// don't remove it without first grepping for 'Base64ToArrayBuffer' in the C++ code
+var Base64ToArrayBuffer = function(base64Str) {
+	var binStr = atob(base64Str);
+	var ab = new ArrayBuffer(binStr.length);
+	var bv = new Uint8Array(ab);
+	for (var i = 0, l = binStr.length; i < l; i++) {
+	bv[[i]] = binStr.charCodeAt(i);
+	}
+	return ab;
+}
+
+class InitializerBase {
+	constructor() {
+		// Initial values.
+		window.welcomeUrl = document.getElementById("init-welcome-url").value ? document.getElementById("init-welcome-url").value: "";
+		window.feedbackUrl = document.getElementById("init-feedback-url").value ? document.getElementById("init-feedback-url").value: "";
+		window.buyProductUrl = document.getElementById("init-buy-product-url").value ? document.getElementById("init-buy-product-url").value: "";
+
+		window.tileSize = 256;
+
+		window.ThisIsAMobileApp = false;
+		window.ThisIsTheiOSApp = false;
+		window.ThisIsTheGtkApp = false;
+		window.ThisIsTheAndroidApp = false;
+		window.ThisIsTheEmscriptenApp = false;
+
+		window.bundlejsLoaded = false;
+		window.fullyLoadedAndReady = false;
+		window.addEventListener('load', function() {
+			window.fullyLoadedAndReady = true;
+		}, false);
+	}
+}
+
+class BrowserInitializer extends InitializerBase {
+	constructor() {
+		super();
+
+		window.WOPIpostMessageReady = false;
+
+		// Start listening for Host_PostmessageReady message and save the result for future
+		window.addEventListener('message', this.postMessageHandler.bind(this), false);
+
+		const element = document.getElementById("initial-variables");
+
+		window.host = element.dataset.host;
+		window.serviceRoot = element.dataset.serviceRoot;
+		window.hexifyUrl = element.dataset.hexifyUrl;
+		window.versionPath = element.dataset.versionPath;
+		window.accessToken = element.dataset.accessToken;
+		window.accessTokenTTL = element.dataset.accessTokenTtl;
+		window.accessHeader = element.dataset.accessHeader;
+		window.postMessageOriginExt = element.dataset.postMessageOriginExt;
+		window.coolLogging = element.dataset.coolLogging;
+		window.coolwsdVersion = element.dataset.coolwsdVersion;
+		window.enableWelcomeMessage = element.dataset.enableWelcomeMessage;
+		window.autoShowWelcome = element.dataset.autoShowWelcome;
+		window.autoShowFeedback = element.dataset.autoShowFeedback;
+		window.allowUpdateNotification = element.dataset.allowUpdateNotification;
+		window.userInterfaceMode = element.dataset.userInterfaceMode;
+		window.useIntegrationTheme = element.dataset.useIntegrationTheme;
+		window.enableMacrosExecution = element.dataset.enableMacrosExecution;
+		window.enableAccessibility = element.dataset.enableAccessibility === 'true';
+		window.outOfFocusTimeoutSecs = element.dataset.outOfFocusTimeoutSecs;
+		window.idleTimeoutSecs = element.dataset.idleTimeoutSecs;
+		window.protocolDebug = element.dataset.protocolDebug;
+		window.frameAncestors = decodeURIComponent(element.dataset.frameAncestors);
+		window.socketProxy = element.dataset.socketProxy;
+		window.uiDefaults = element.dataset.uiDefaults;
+		window.checkFileInfoOverride = element.dataset.checkFileInfoOverride;
+		window.deeplEnabled = element.dataset.deeplEnabled;
+		window.zoteroEnabled = element.dataset.zoteroEnabled;
+		window.savedUIState = element.dataset.savedUiState;
+		window.wasmEnabled = element.dataset.wasmEnabled;
+		window.indirectionUrl = element.dataset.indirectionUrl;
+	}
+
+	postMessageHandler(e) {
+		if (!(e && e.data))
+			return;
+
+		try {
+			var msg = JSON.parse(e.data);
+		} catch (err) {
+			return;
+		}
+
+		if (msg.MessageId === 'Host_PostmessageReady') {
+			window.WOPIPostmessageReady = true;
+			window.removeEventListener('message', this.postMessageHandler, false);
+			console.log('Received Host_PostmessageReady.');
+		}
+	}
+}
+
+class MobileAppInitializer extends InitializerBase {
+	constructor() {
+		super();
+
+		window.ThisIsAMobileApp = true;
+		window.HelpFile = document.getElementById("init-help-file").value;
+
+		window.open = function (url, windowName, windowFeatures) {
+		  window.postMobileMessage('HYPERLINK ' + url); /* don't call the 'normal' window.open on mobile at all */
+		};
+
+		window.MobileAppName = 'MOBILEAPPNAME';
+		window.brandProductName = 'MOBILEAPPNAME';
+
+		window.host = "";
+		window.serviceRoot = "";
+		window.hexifyUrl = false;
+		window.postMessageOriginExt = "";
+		window.coolLogging = "true";
+		window.enableWelcomeMessage = false;
+		window.autoShowWelcome = false;
+		window.autoShowFeedback = true;
+		window.allowUpdateNotification = false;
+		window.outOfFocusTimeoutSecs = 1000000;
+		window.idleTimeoutSecs = 1000000;
+		window.protocolDebug = false;
+		window.frameAncestors = "";
+		window.socketProxy = false;
+		window.uiDefaults = {};
+		window.useIntegrationTheme = "false";
+		window.checkFileInfoOverride = {};
+		window.deeplEnabled = false;
+		window.zoteroEnabled = false;
+		window.savedUIState = true;
+		window.wasmEnabled = false;
+		window.indirectionUrl = "";
+
+		const element = document.getElementById("initial-variables");
+		window.accessToken = element.dataset.accessToken;
+		window.accessTokenTTL = element.dataset.accessTokenTtl;
+		window.accessHeader = element.dataset.accessHeader;
+	}
+}
+
+class IOSAppInitializer extends MobileAppInitializer {
+	constructor() {
+		super();
+
+		window.ThisIsTheiOSApp = true;
+		window.postMobileMessage = function(msg) { window.webkit.messageHandlers.lok.postMessage(msg); };
+		window.postMobileError   = function(msg) { window.webkit.messageHandlers.error.postMessage(msg); };
+		window.postMobileDebug   = function(msg) { window.webkit.messageHandlers.debug.postMessage(msg); };
+	}
+}
+
+class GTKAppInitializer extends MobileAppInitializer {
+	constructor() {
+		super();
+
+		window.ThisIsTheGtkApp = true;
+		window.postMobileMessage = function(msg) { window.webkit.messageHandlers.cool.postMessage(msg, '*'); };
+		window.postMobileError   = function(msg) { window.webkit.messageHandlers.error.postMessage(msg, '*'); };
+		window.postMobileDebug   = function(msg) { window.webkit.messageHandlers.debug.postMessage(msg, '*'); };
+	}
+}
+
+class AndroidAppInitializer extends MobileAppInitializer {
+	constructor() {
+		super();
+
+		window.ThisIsTheAndroidApp = true;
+		window.postMobileMessage = function(msg) { window.COOLMessageHandler.postMobileMessage(msg); };
+		window.postMobileError   = function(msg) { window.COOLMessageHandler.postMobileError(msg); };
+		window.postMobileDebug   = function(msg) { window.COOLMessageHandler.postMobileDebug(msg); };
+	}
+}
+
+class EMSCRIPTENAppInitializer extends MobileAppInitializer {
+	constructor() {
+		super();
+
+		window.ThisIsTheEmscriptenApp = true;
+		window.postMobileMessage = function(msg) { app.HandleCOOLMessage(app.AllocateUTF8(msg)); };
+		window.postMobileError   = function(msg) { console.log('COOL Error: ' + msg); };
+		window.postMobileDebug   = function(msg) { console.log('COOL Debug: ' + msg); };
+
+		const element = document.getElementById("initial-variables");
+
+		window.accessToken = element.dataset.accessToken;
+		window.accessTokenTTL = element.dataset.accessTokenTtl;
+		window.accessHeader = element.dataset.accessHeader;
+	}
+}
+
+function getInitializerClass() {
+	window.appType = document.getElementById("init-app-type").value;
+
+	if (window.appType === "browser") {
+		return new BrowserInitializer();
+	}
+	else if (window.appType === "mobile") {
+		const osType = document.getElementById("init-mobile-app-os-type");
+
+		if (osType) {
+			if (osType === "IOS")
+				return IOSAppInitializer();
+			else if (osType === "GTK")
+				return new GTKAppInitializer();
+			else if (osType === "ANDROID")
+				return new AndroidAppInitializer();
+			else if (osType === "EMSCRIPTEN")
+				return new EMSCRIPTENAppInitializer();
+		}
+	}
+}
 
 (function (global) {
+	//let initiatorClass = getInitializerClass();
+	getInitializerClass();
+
+
 
 	global.logServer = function (log) {
 		if (global.ThisIsAMobileApp) {
