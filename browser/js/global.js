@@ -1044,7 +1044,10 @@ function getInitializerClass() {
 			//global.app.console.debug('send msg - ' + that.msgInflight + ' on session ' +
 			//	      that.sessionId + '  queue: "' + that.sendQueue + '"');
 			var req = new XMLHttpRequest();
-			req.open('POST', that.getEndPoint('write'));
+			let url = that.getEndPoint('write');
+			url = url.replace('wss://', 'https://');
+			url = url.replace('ws://', 'http://');
+			req.open('POST', url);
 			req.responseType = 'arraybuffer';
 			req.addEventListener('load', function() {
 				if (this.status == 200)
@@ -1118,7 +1121,11 @@ function getInitializerClass() {
 			global.lastCreatedProxySocket = performance.now();
 
 			var req = new XMLHttpRequest();
-			req.open('POST', that.getEndPoint('open'));
+			let endPoint = that.getEndPoint('open');
+			endPoint = endPoint.replace('wss://', 'https://');
+			endPoint = endPoint.replace('ws://', 'http://');
+
+			req.open('POST', endPoint);
 			req.responseType = 'text';
 			req.addEventListener('load', function() {
 				global.app.console.debug('got session: ' + this.responseText);
@@ -1163,7 +1170,9 @@ function getInitializerClass() {
 			}
 		};
 		this.sendCloseMsg = function(beacon) {
-			var url = that.getEndPoint('close');
+			let url = that.getEndPoint('close');
+			url = url.replace('wss://', 'https://');
+			url = url.replace('ws://', 'http://');
 			if (!beacon)
 			{
 				var req = new XMLHttpRequest();
@@ -1310,7 +1319,10 @@ function getInitializerClass() {
 		};
 
 		var http = new XMLHttpRequest();
-		http.open('GET', global.indirectionUrl + '?Uri=' + encodeURIComponent(that.uri), true);
+		let url = global.indirectionUrl + '?Uri=' + encodeURIComponent(that.uri);
+		url = url.replace('wss://', 'https://');
+		url = url.replace('ws://', 'http://');
+		http.open('GET', url, true);
 		http.responseType = 'json';
 		http.addEventListener('load', function() {
 			if (this.status === 200) {
