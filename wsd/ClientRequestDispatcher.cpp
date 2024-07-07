@@ -1141,8 +1141,7 @@ void ClientRequestDispatcher::handleMediaRequest(const Poco::Net::HTTPRequest& r
 
     LOG_DBG_S("Media request: " << request.getURI());
 
-    std::string decoded;
-    Poco::URI::decode(request.getURI(), decoded);
+    const std::string decoded = Util::decodeURIComponent(request.getURI());
     Poco::URI requestUri(decoded);
     Poco::URI::QueryParameters params = requestUri.getQueryParameters();
     std::string WOPISrc, serverId, viewId, tag, mime;
@@ -1569,9 +1568,7 @@ void ClientRequestDispatcher::handlePostRequest(const RequestDetails& requestDet
 
         bool foundDownloadId = !url.empty();
 
-        std::string decoded;
-        Poco::URI::decode(url, decoded);
-
+        const std::string decoded = Util::decodeURIComponent(url);
         const Poco::Path filePath(COOLWSD::ChildRoot + jailId + JAILED_DOCUMENT_ROOT + decoded);
         const std::string filePathAnonym = COOLWSD::anonymizeUrl(filePath.toString());
 
