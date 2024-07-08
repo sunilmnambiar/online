@@ -12,6 +12,7 @@ window.app = {
 
 // This function may look unused, but it's needed in WASM and Android to send data through the fake websocket. Please
 // don't remove it without first grepping for 'Base64ToArrayBuffer' in the C++ code
+// eslint-disable-next-line
 var Base64ToArrayBuffer = function(base64Str) {
 	var binStr = atob(base64Str);
 	var ab = new ArrayBuffer(binStr.length);
@@ -257,6 +258,35 @@ class InitializerBase {
 		window.feedbackUrl = document.getElementById("init-feedback-url").value ? document.getElementById("init-feedback-url").value: "";
 		window.buyProductUrl = document.getElementById("init-buy-product-url").value ? document.getElementById("init-buy-product-url").value: "";
 
+		const element = document.getElementById("initial-variables");
+
+		window.host = "";
+		window.serviceRoot = "";
+		window.hexifyUrl = false;
+		window.versionPath = "";
+		window.accessToken = element.dataset.accessToken;
+		window.accessTokenTTL = element.dataset.accessTokenTtl;
+		window.accessHeader = element.dataset.accessHeader;
+		window.postMessageOriginExt = "";
+		window.coolwsdVersion = "";
+		window.enableWelcomeMessage = false;
+		window.autoShowWelcome = false;
+		window.autoShowFeedback = true;
+		window.allowUpdateNotification = false;
+		window.useIntegrationTheme = false;
+		window.enableMacrosExecution = false;
+		window.enableAccessibility = false;
+		window.protocolDebug = false;
+		window.frameAncestors = "";
+		window.socketProxy = false;
+		window.uiDefaults = {};
+		window.checkFileInfoOverride = {};
+		window.deeplEnabled = false;
+		window.zoteroEnabled = false;
+		window.savedUIState = true;
+		window.wasmEnabled = false;
+		window.indirectionUrl = "";
+
 		window.tileSize = 256;
 
 		window.ThisIsAMobileApp = false;
@@ -305,7 +335,7 @@ class InitializerBase {
 		const theme_name = document.getElementById('init-branding-name').value;
 		let theme_prefix = '';
 
-		if(window.useIntegrationTheme === 'true' && theme_name !== '')
+		if(window.useIntegrationTheme && theme_name !== '')
 			theme_prefix = theme_name + '/';
 
 		if (window.mode.isMobile()) {
@@ -347,33 +377,31 @@ class BrowserInitializer extends InitializerBase {
 
 		window.host = element.dataset.host;
 		window.serviceRoot = element.dataset.serviceRoot;
-		window.hexifyUrl = element.dataset.hexifyUrl;
+		window.hexifyUrl = element.dataset.hexifyUrl.toLowerCase().trim() === "true";
 		window.versionPath = element.dataset.versionPath;
-		window.accessToken = element.dataset.accessToken;
-		window.accessTokenTTL = element.dataset.accessTokenTtl;
-		window.accessHeader = element.dataset.accessHeader;
+
 		window.postMessageOriginExt = element.dataset.postMessageOriginExt;
 		window.coolLogging = element.dataset.coolLogging;
 		window.coolwsdVersion = element.dataset.coolwsdVersion;
-		window.enableWelcomeMessage = element.dataset.enableWelcomeMessage;
-		window.autoShowWelcome = element.dataset.autoShowWelcome;
-		window.autoShowFeedback = element.dataset.autoShowFeedback;
-		window.allowUpdateNotification = element.dataset.allowUpdateNotification;
+		window.enableWelcomeMessage = element.dataset.enableWelcomeMessage.toLowerCase().trim() === "true";
+		window.autoShowWelcome = element.dataset.autoShowWelcome.toLowerCase().trim() === "true";
+		window.autoShowFeedback = element.dataset.autoShowFeedback.toLowerCase().trim() === "true";
+		window.allowUpdateNotification = element.dataset.allowUpdateNotification.toLowerCase().trim() === "true";
 		window.userInterfaceMode = element.dataset.userInterfaceMode;
-		window.useIntegrationTheme = element.dataset.useIntegrationTheme;
-		window.enableMacrosExecution = element.dataset.enableMacrosExecution;
-		window.enableAccessibility = element.dataset.enableAccessibility === 'true';
-		window.outOfFocusTimeoutSecs = element.dataset.outOfFocusTimeoutSecs;
-		window.idleTimeoutSecs = element.dataset.idleTimeoutSecs;
-		window.protocolDebug = element.dataset.protocolDebug;
+		window.useIntegrationTheme = element.dataset.useIntegrationTheme.toLowerCase().trim() === "true";
+		window.enableMacrosExecution = element.dataset.enableMacrosExecution.toLowerCase().trim() === "true";
+		window.enableAccessibility = element.dataset.enableAccessibility.toLowerCase().trim() === "true";
+		window.outOfFocusTimeoutSecs = parseInt(element.dataset.outOfFocusTimeoutSecs);
+		window.idleTimeoutSecs = parseInt(element.dataset.idleTimeoutSecs);
+		window.protocolDebug = element.dataset.protocolDebug.toLowerCase().trim() === "true";
 		window.frameAncestors = decodeURIComponent(element.dataset.frameAncestors);
-		window.socketProxy = element.dataset.socketProxy;
+		window.socketProxy = element.dataset.socketProxy.toLowerCase().trim() === "true";
 		window.uiDefaults = element.dataset.uiDefaults;
 		window.checkFileInfoOverride = element.dataset.checkFileInfoOverride;
-		window.deeplEnabled = element.dataset.deeplEnabled;
-		window.zoteroEnabled = element.dataset.zoteroEnabled;
-		window.savedUIState = element.dataset.savedUiState;
-		window.wasmEnabled = element.dataset.wasmEnabled;
+		window.deeplEnabled = element.dataset.deeplEnabled.toLowerCase().trim() === "true";
+		window.zoteroEnabled = element.dataset.zoteroEnabled.toLowerCase().trim() === "true";
+		window.savedUIState = element.dataset.savedUiState.toLowerCase().trim() === "true";
+		window.wasmEnabled = element.dataset.wasmEnabled.toLowerCase().trim() === "true";
 		window.indirectionUrl = element.dataset.indirectionUrl;
 	}
 
@@ -402,6 +430,7 @@ class MobileAppInitializer extends InitializerBase {
 		window.ThisIsAMobileApp = true;
 		window.HelpFile = document.getElementById("init-help-file").value;
 
+		// eslint-disable-next-line
 		window.open = function (url, windowName, windowFeatures) {
 		  window.postMobileMessage('HYPERLINK ' + url); /* don't call the 'normal' window.open on mobile at all */
 		};
@@ -409,33 +438,9 @@ class MobileAppInitializer extends InitializerBase {
 		window.MobileAppName = 'MOBILEAPPNAME';
 		window.brandProductName = 'MOBILEAPPNAME';
 
-		window.host = "";
-		window.serviceRoot = "";
-		window.hexifyUrl = false;
-		window.postMessageOriginExt = "";
 		window.coolLogging = "true";
-		window.enableWelcomeMessage = false;
-		window.autoShowWelcome = false;
-		window.autoShowFeedback = true;
-		window.allowUpdateNotification = false;
 		window.outOfFocusTimeoutSecs = 1000000;
 		window.idleTimeoutSecs = 1000000;
-		window.protocolDebug = false;
-		window.frameAncestors = "";
-		window.socketProxy = false;
-		window.uiDefaults = {};
-		window.useIntegrationTheme = "false";
-		window.checkFileInfoOverride = {};
-		window.deeplEnabled = false;
-		window.zoteroEnabled = false;
-		window.savedUIState = true;
-		window.wasmEnabled = false;
-		window.indirectionUrl = "";
-
-		const element = document.getElementById("initial-variables");
-		window.accessToken = element.dataset.accessToken;
-		window.accessTokenTTL = element.dataset.accessTokenTtl;
-		window.accessHeader = element.dataset.accessHeader;
 	}
 }
 
@@ -490,12 +495,6 @@ class EMSCRIPTENAppInitializer extends MobileAppInitializer {
 		window.postMobileError   = function(msg) { console.log('COOL Error: ' + msg); };
 		window.postMobileDebug   = function(msg) { console.log('COOL Debug: ' + msg); };
 
-		const element = document.getElementById("initial-variables");
-
-		window.accessToken = element.dataset.accessToken;
-		window.accessTokenTTL = element.dataset.accessTokenTtl;
-		window.accessHeader = element.dataset.accessHeader;
-
 		window.userInterfaceMode = 'notebookbar';
 	}
 }
@@ -507,11 +506,13 @@ function getInitializerClass() {
 		return new BrowserInitializer();
 	}
 	else if (window.appType === "mobile") {
-		const osType = document.getElementById("init-mobile-app-os-type");
+		let osType = document.getElementById("init-mobile-app-os-type");
 
 		if (osType) {
+			osType = osType.value;
+
 			if (osType === "IOS")
-				return IOSAppInitializer();
+				return new IOSAppInitializer();
 			else if (osType === "GTK")
 				return new GTKAppInitializer();
 			else if (osType === "ANDROID")
@@ -1108,9 +1109,7 @@ function getInitializerClass() {
 			//global.app.console.debug('send msg - ' + that.msgInflight + ' on session ' +
 			//	      that.sessionId + '  queue: "' + that.sendQueue + '"');
 			var req = new XMLHttpRequest();
-			let url = that.getEndPoint('write');
-			url = url.replace('wss://', 'https://');
-			url = url.replace('ws://', 'http://');
+			const url = that.getEndPoint('write');
 			req.open('POST', url);
 			req.responseType = 'arraybuffer';
 			req.addEventListener('load', function() {
@@ -1185,9 +1184,7 @@ function getInitializerClass() {
 			global.lastCreatedProxySocket = performance.now();
 
 			var req = new XMLHttpRequest();
-			let endPoint = that.getEndPoint('open');
-			endPoint = endPoint.replace('wss://', 'https://');
-			endPoint = endPoint.replace('ws://', 'http://');
+			const endPoint = that.getEndPoint('open');
 
 			req.open('POST', endPoint);
 			req.responseType = 'text';
@@ -1234,9 +1231,8 @@ function getInitializerClass() {
 			}
 		};
 		this.sendCloseMsg = function(beacon) {
-			let url = that.getEndPoint('close');
-			url = url.replace('wss://', 'https://');
-			url = url.replace('ws://', 'http://');
+			const url = that.getEndPoint('close');
+
 			if (!beacon)
 			{
 				var req = new XMLHttpRequest();
@@ -1263,6 +1259,8 @@ function getInitializerClass() {
 		};
 		this.getEndPoint = function(command) {
 			var base = this.uri;
+			base = base.replace('wss://', 'https://');
+			base = base.replace('ws://', 'http://');
 			return base + '/' + this.sessionId + '/' + command + '/' + this.outSerial;
 		};
 		global.app.console.debug('proxy: new socket ' + this.id + ' ' + this.uri);
@@ -1440,7 +1438,6 @@ function getInitializerClass() {
 		}
 
 		if (global.socketProxy) {
-			global.socketProxy = true;
 			return new global.ProxySocket(uri);
 		} else if (global.indirectionUrl != '' && !global.migrating) {
 			global.indirectSocket = true;

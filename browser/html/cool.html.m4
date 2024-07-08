@@ -47,7 +47,7 @@ m4_ifelse(MOBILEAPP, [true],
 )
 
 <input type="hidden" id="init-uri-prefix" value="m4_ifelse(MOBILEAPP, [], [%SERVICE_ROOT%/browser/%VERSION%/])" />
-<input tyype="hidden" id="init-branding-name" value="%BRANDING_THEME%" />
+<input type="hidden" id="init-branding-name" value="%BRANDING_THEME%" />
 
 m4_dnl# For use in conditionals in JS:
 m4_ifelse(IOSAPP, [true], [<input type="hidden" id="init-mobile-app-os-type" value="IOS" />])
@@ -223,36 +223,36 @@ m4_ifelse(MOBILEAPP, [true],
       ],
      [
       <input type="hidden" id="initial-variables"
-      data-host = '%HOST%'
-      data-service-root = '%SERVICE_ROOT%'
-      data-hexify-url = %HEXIFY_URL%
-      data-version-path = '%VERSION%'
-      data-access-token = '%ACCESS_TOKEN%'
-      data-access-token-ttl = '%ACCESS_TOKEN_TTL%'
-      data-access-header = '%ACCESS_HEADER%'
-      data-post-message-origin-ext = '%POSTMESSAGE_ORIGIN%'
-      data-cool-logging = '%BROWSER_LOGGING%'
-      data-coolwsd-version = '%COOLWSD_VERSION%'
-      data-enable-welcome-message = %ENABLE_WELCOME_MSG%
-      data-auto-show-welcome = %AUTO_SHOW_WELCOME%
-      data-auto-show-feedback = %AUTO_SHOW_FEEDBACK%
-      data-allow-update-notification = %ENABLE_UPDATE_NOTIFICATION%
-      data-user-interface-mode = '%USER_INTERFACE_MODE%'
-      data-use-integration-theme = '%USE_INTEGRATION_THEME%'
-      data-enable-macros-execution = '%ENABLE_MACROS_EXECUTION%'
-      data-enable-accessibility = '%ENABLE_ACCESSIBILITY%' === 'true'
-      data-out-of-focus-timeout-secs = %OUT_OF_FOCUS_TIMEOUT_SECS%
-      data-idle-timeout-secs = %IDLE_TIMEOUT_SECS%
-      data-protocol-debug = %PROTOCOL_DEBUG%
-      data-frame-ancestors = decodeURIComponent('%FRAME_ANCESTORS%')
-      data-socket-proxy = %SOCKET_PROXY%
-      data-ui-defaults = %UI_DEFAULTS%
-      data-check-file-info-override = %CHECK_FILE_INFO_OVERRIDE%
-      data-deepl-enabled = %DEEPL_ENABLED%
-      data-zotero-enabled = %ZOTERO_ENABLED%
-      data-saved-ui-state = %SAVED_UI_STATE%
-      data-wasm-enabled = %WASM_ENABLED%
-      data-indirection-url = '%INDIRECTION_URL%'
+      data-host = "%HOST%"
+      data-service-root = "%SERVICE_ROOT%"
+      data-hexify-url = "%HEXIFY_URL%"
+      data-version-path = "%VERSION%"
+      data-access-token = "%ACCESS_TOKEN%"
+      data-access-token-ttl = "%ACCESS_TOKEN_TTL%"
+      data-access-header = "%ACCESS_HEADER%"
+      data-post-message-origin-ext = "%POSTMESSAGE_ORIGIN%"
+      data-cool-logging = "%BROWSER_LOGGING%"
+      data-coolwsd-version = "%COOLWSD_VERSION%"
+      data-enable-welcome-message = "%ENABLE_WELCOME_MSG%"
+      data-auto-show-welcome = "%AUTO_SHOW_WELCOME%"
+      data-auto-show-feedback = "%AUTO_SHOW_FEEDBACK%"
+      data-allow-update-notification = "%ENABLE_UPDATE_NOTIFICATION%"
+      data-user-interface-mode = "%USER_INTERFACE_MODE%"
+      data-use-integration-theme = "%USE_INTEGRATION_THEME%"
+      data-enable-macros-execution = "%ENABLE_MACROS_EXECUTION%"
+      data-enable-accessibility = "%ENABLE_ACCESSIBILITY%"
+      data-out-of-focus-timeout-secs = "%OUT_OF_FOCUS_TIMEOUT_SECS%"
+      data-idle-timeout-secs = "%IDLE_TIMEOUT_SECS%"
+      data-protocol-debug = "%PROTOCOL_DEBUG%"
+      data-frame-ancestors = "%FRAME_ANCESTORS%"
+      data-socket-proxy = "%SOCKET_PROXY%"
+      data-ui-defaults = "%UI_DEFAULTS%"
+      data-check-file-info-override = "%CHECK_FILE_INFO_OVERRIDE%"
+      data-deepl-enabled = "%DEEPL_ENABLED%"
+      data-zotero-enabled = "%ZOTERO_ENABLED%"
+      data-saved-ui-state = "%SAVED_UI_STATE%"
+      data-wasm-enabled = "%WASM_ENABLED%"
+      data-indirection-url = "%INDIRECTION_URL%"
       />
     ])
 
