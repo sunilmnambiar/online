@@ -1259,8 +1259,6 @@ function getInitializerClass() {
 		};
 		this.getEndPoint = function(command) {
 			var base = this.uri;
-			base = base.replace('wss://', 'https://');
-			base = base.replace('ws://', 'http://');
 			return base + '/' + this.sessionId + '/' + command + '/' + this.outSerial;
 		};
 		global.app.console.debug('proxy: new socket ' + this.id + ' ' + this.uri);
@@ -1382,8 +1380,6 @@ function getInitializerClass() {
 
 		var http = new XMLHttpRequest();
 		let url = global.indirectionUrl + '?Uri=' + encodeURIComponent(that.uri);
-		url = url.replace('wss://', 'https://');
-		url = url.replace('ws://', 'http://');
 		http.open('GET', url, true);
 		http.responseType = 'json';
 		http.addEventListener('load', function() {

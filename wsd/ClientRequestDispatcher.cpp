@@ -1713,11 +1713,6 @@ void ClientRequestDispatcher::handlePostRequest(const RequestDetails& requestDet
 
         return;
     }
-    else if (requestDetails.equals(2, "ws"))
-    {
-        handleClientProxyRequest(request, requestDetails, message, disposition);
-        return;
-    }
 
     throw BadRequestException("Invalid or unknown request.");
 }
