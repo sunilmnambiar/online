@@ -46,6 +46,9 @@ m4_ifelse(MOBILEAPP, [true],
 ]
 )
 
+<input type="hidden" id="init-uri-prefix" value="m4_ifelse(MOBILEAPP, [], [%SERVICE_ROOT%/browser/%VERSION%/])" />
+<input tyype="hidden" id="init-branding-name" value="%BRANDING_THEME%" />
+
 m4_dnl# For use in conditionals in JS:
 m4_ifelse(IOSAPP, [true], [<input type="hidden" id="init-mobile-app-os-type" value="IOS" />])
 m4_ifelse(GTKAPP, [true], [<input type="hidden" id="init-mobile-app-os-type" value="GTK" />])
@@ -259,73 +262,13 @@ m4_ifelse(MOBILEAPP, [true],
   [<script type="text/javascript" src="%SERVICE_ROOT%/browser/%VERSION%/global.js"></script>]
 )
 
-    <script>
-
-// Related to issue #5841: the iOS app sets the base text direction via the
-// "dir" parameter
-m4_ifelse(IOSAPP,[true],
-     [document.dir = window.coolParams.get('dir');])
-
-m4_ifelse(IOSAPP,[true],
-     [window.userInterfaceMode = window.coolParams.get('userinterfacemode');])
-
-m4_ifelse(ANDROIDAPP,[true],
-     [window.userInterfaceMode = window.coolParams.get('userinterfacemode');])
-
-var darkTheme = window.coolParams.get('darkTheme');
-if (darkTheme) {window.uiDefaults = {'darkTheme': true};}
-
-m4_ifelse(EMSCRIPTENAPP,[true],
-     [window.userInterfaceMode = 'notebookbar';])
-
-// Dynamically load the appropriate *-mobile.css, *-tablet.css or *-desktop.css
-var link = document.createElement('link');
-link.setAttribute("rel", "stylesheet");
-link.setAttribute("type", "text/css");
-var brandingLink = document.createElement('link');
-brandingLink.setAttribute("rel", "stylesheet");
-brandingLink.setAttribute("type", "text/css");
-
-var theme_name = '%BRANDING_THEME%';
-var theme_prefix = '';
-if(window.useIntegrationTheme === 'true' && theme_name !== '') {
-    theme_prefix = theme_name + '/';
-}
-
-if (window.mode.isMobile()) {
-    [link.setAttribute("href", ']m4_ifelse(MOBILEAPP,[],[%SERVICE_ROOT%/browser/%VERSION%/])[device-mobile.css');]
-    [brandingLink.setAttribute("href", ']m4_ifelse(MOBILEAPP,[],[%SERVICE_ROOT%/browser/%VERSION%/])m4_ifelse(IOSAPP,[true],[Branding/])[' + theme_prefix + 'branding-mobile.css');]
-} else if (window.mode.isTablet()) {
-    [link.setAttribute("href", ']m4_ifelse(MOBILEAPP,[],[%SERVICE_ROOT%/browser/%VERSION%/])[device-tablet.css');]
-    [brandingLink.setAttribute("href", ']m4_ifelse(MOBILEAPP,[],[%SERVICE_ROOT%/browser/%VERSION%/])m4_ifelse(IOSAPP,[true],[Branding/])[' + theme_prefix + 'branding-tablet.css');]
-} else {
-    [link.setAttribute("href", ']m4_ifelse(MOBILEAPP,[],[%SERVICE_ROOT%/browser/%VERSION%/])[device-desktop.css');]
-    [brandingLink.setAttribute("href", ']m4_ifelse(MOBILEAPP,[],[%SERVICE_ROOT%/browser/%VERSION%/])[' + theme_prefix + 'branding-desktop.css');]
-}
-document.getElementsByTagName("head")[[0]].appendChild(link);
-document.getElementsByTagName("head")[[0]].appendChild(brandingLink);
-</script>
-
 m4_ifelse(MOBILEAPP,[true],
   <!-- This is for a mobile app so the script files are in the same folder -->
-  m4_ifelse(BUNDLE,[],m4_foreachq([fileJS],[COOL_JS],
-  [    <script src="fileJS" defer></script>
-  ]),
-  [    <script src="bundle.js" defer></script>
-  ]),
-  m4_ifelse(BUNDLE,[],
-      <!-- Using indivisual JS files -->
-      m4_foreachq([fileJS],[COOL_JS],
-      [ <script src="%SERVICE_ROOT%/browser/%VERSION%/fileJS" defer></script>
-      ]),
-  [
-       <!-- Using bundled JS files -->
-       <script src="%SERVICE_ROOT%/browser/%VERSION%/bundle.js" defer></script>
-  ])
+  m4_ifelse(BUNDLE, [], m4_foreachq([fileJS], [COOL_JS], [<script src="fileJS" defer></script>]), [<script src="bundle.js" defer></script>]),
+  m4_ifelse(BUNDLE, [], m4_foreachq([fileJS], [COOL_JS],
+        [<script src="%SERVICE_ROOT%/browser/%VERSION%/fileJS" defer></script>]), [<script src="%SERVICE_ROOT%/browser/%VERSION%/bundle.js" defer></script>])
 )m4_dnl
 
-    m4_ifelse(MOBILEAPP,[true],
-    [<script src="m4_ifelse(IOSAPP,[true],[Branding/])branding.js"></script>],
-    [<!--%BRANDING_JS%--> <!-- logo onclick handler -->
-    <!--%CSS_VARIABLES%-->])
+m4_ifelse(MOBILEAPP, [true], [<script src="m4_ifelse(IOSAPP, [true], [Branding/])branding.js"></script>],
+        [<!--%BRANDING_JS%--> <!-- logo onclick handler --><!--%CSS_VARIABLES%-->])
 </body></html>
