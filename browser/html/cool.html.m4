@@ -9,9 +9,9 @@ m4_define(_YEAR_,m4_esyscmd(date +%Y|tr -d '\n'))
 <!-- saved from url=(0054)http://leafletjs.com/examples/quick-start-example.html -->
 m4_ifelse(IOSAPP,[true],
 <!-- Related to issue #5841: the iOS app sets the base text direction via the "dir" parameter -->
-<html dir="" style="height:100%"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" data-theme="%UI_THEME%">
+<html dir=""><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" data-theme="%UI_THEME%">
 ,
-<html %UI_RTL_SETTINGS% style="height:100%"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html %UI_RTL_SETTINGS%><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 )m4_dnl
 <title>Online Editor</title>
 <meta charset="utf-8">
@@ -89,7 +89,7 @@ m4_ifelse(MOBILEAPP,[true],
 )m4_dnl
 </head>
 
-  <body style="user-select: none;height:100%;display:flex;flex-direction:column">
+  <body>
     <!--The "controls" div holds map controls such as the Zoom button and
         it's separated from the map in order to have the controls on the top
         of the page all the time.
