@@ -103,7 +103,7 @@ m4_ifelse(MOBILEAPP,[true],
 
     <nav class="main-nav" role="navigation">
       <!-- Mobile menu toggle button (hamburger/x icon) -->
-      <input id="main-menu-state" type="checkbox" style="display: none"/>
+      <input id="main-menu-state" type="checkbox" />
       <ul id="main-menu" class="sm sm-simple lo-menu readonly"></ul>
       <div id="document-titlebar">
         <div class="document-title">
