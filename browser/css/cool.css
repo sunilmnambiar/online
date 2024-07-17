@@ -1057,6 +1057,10 @@ nav.spreadsheet-color-indicator ~ #sidebar-dock-wrapper {
 	flex-grow: 1;
 }
 
+#about-dialog {
+	display: none;
+}
+
 #about-dialog-container, #about-dialog-header {
 	display: flex;
 	flex-flow: row nowrap;
