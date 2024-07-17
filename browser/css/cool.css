@@ -524,6 +524,10 @@ nav.spreadsheet-color-indicator ~ #sidebar-dock-wrapper {
 	border-color: transparent var(--color-background-lighter) transparent transparent;
 }
 
+#mobile-wizard {
+	display: none;
+}
+
 .mobile-wizard-content .cool-annotation {
 	max-width: none;
 }
