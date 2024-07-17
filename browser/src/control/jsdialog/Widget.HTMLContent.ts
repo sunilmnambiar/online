@@ -152,6 +152,8 @@ function htmlContent(
 	data: HtmlContentJson,
 	builder: any,
 ) {
+	parentContainer.replaceChildren();
+
 	parentContainer.innerHTML = getHtmlFromId(
 		data.htmlId,
 		data.closeCallback,

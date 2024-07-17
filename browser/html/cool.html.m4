@@ -109,7 +109,7 @@ m4_ifelse(MOBILEAPP,[true],
         <div class="document-title">
           <!-- visuallyhidden: hide it visually but keep it available to screen reader and other assistive technology -->
           <label class="visuallyhidden" for="document-name-input" aria-hidden="false">Document name</label>
-          <input id="document-name-input" type="text" spellcheck="false" disabled="true" style="display: none"/>
+          <input id="document-name-input" type="text" spellcheck="false" disabled="true" />
           <div id="document-name-input-loading-bar"></div>
           <progress id="document-name-input-progress-bar" class="progress-bar" value="0" max="99"></progress>
         </div>
@@ -139,35 +139,35 @@ m4_ifelse(MOBILEAPP,[true],
             </label>
           </div>
         </div>
-       <div colspan="4" id="formulabar" style="display: none"></div>
+       <div colspan="4" id="formulabar"></div>
        <progress id="mobile-progress-bar" class="progress-bar" value="0" max="99"></progress>
     </div>
 
-    <input id="insertgraphic" aria-labelledby="menu-insertgraphic" type="file" accept="image/*" style="position: fixed; top: -100em">
-    <input id="selectbackground" aria-labelledby="menu-selectbackground" type="file" accept="image/*" style="position: fixed; top: -100em">
+    <input id="insertgraphic" aria-labelledby="menu-insertgraphic" type="file" accept="image/*">
+    <input id="selectbackground" aria-labelledby="menu-selectbackground" type="file" accept="image/*">
 
-    <div id="main-document-content" style="display:flex; flex-direction: row; flex: 1; margin: 0; padding: 0; min-height: 0">
+    <div id="main-document-content">
       <div id="presentation-controls-wrapper" class="readonly">
         <div id="slide-sorter"></div>
-        <div id="presentation-toolbar" style="display: none"></div>
+        <div id="presentation-toolbar"></div>
       </div>
       <div id="document-container" class="readonly" dir="ltr">
         <div id="map"></div>
       </div>
-      <div id="sidebar-dock-wrapper" style="display: none;">
+      <div id="sidebar-dock-wrapper">
         <div id="sidebar-panel"></div>
       </div>
     </div>
 
-    <div id="spreadsheet-toolbar" style="display: none"></div>
+    <div id="spreadsheet-toolbar"></div>
 
-    <div id="mobile-edit-button" style="display: none">
+    <div id="mobile-edit-button">
       <div id="mobile-edit-button-image"></div>
     </div>
 
-    <div id="toolbar-down" style="display: none"></div>
-    <div id="toolbar-search" style="display: none"></div>
-    <div id="mobile-wizard" style="display: none">
+    <div id="toolbar-down"></div>
+    <div id="toolbar-search"></div>
+    <div id="mobile-wizard">
       <div id="mobile-wizard-tabs"></div>
       <table id="mobile-wizard-titlebar" class="mobile-wizard-titlebar" width="100%">
         <tr>
@@ -179,7 +179,7 @@ m4_ifelse(MOBILEAPP,[true],
     </div>
 
     <!-- Remove if you don't want the About dialog -->
-    <div id="about-dialog" style="display:none; user-select: text" tabIndex="0">
+    <div id="about-dialog" tabIndex="0">
       <div id="about-dialog-header">
         <fig id="integrator-logo"></fig>
         <h1 id="product-name">Collabora Online</h1>
@@ -193,17 +193,17 @@ m4_ifelse(MOBILEAPP,[true],
         <div id="about-dialog-info-container">
           <div id="about-dialog-info">
             <div id="coolwsd-version-label"></div>
-            <div style="margin-inline-end: auto;"><div id="coolwsd-version" dir="ltr"></div></div>
+            <div class="about-dialog-info-div"><div id="coolwsd-version" dir="ltr"></div></div>
             <div class="spacer"></div>
             <div id="lokit-version-label"></div>
-            <div style="margin-inline-end: auto;"><div id="lokit-version" dir="ltr"></div></div>
+            <div class="about-dialog-info-div"><div id="lokit-version" dir="ltr"></div></div>
             m4_ifelse(MOBILEAPP,[],[<div id="served-by"><span id="served-by-label"></span>&nbsp;<span id="os-info"></span>&nbsp;<wbr><span id="coolwsd-id"></span></div>],[<p></p>])
             <div id="slow-proxy"></div>
             m4_ifelse(DEBUG,[true],[<div id="js-dialog">JSDialogs: <a href="javascript:void(function() { app.socket.sendMessage('uno .uno:WidgetTestDialog') }() )">View widgets</a></div>])
             <div id="routeToken"></div>
-            <div id="wopi-host-id" style="display: none">%WOPI_HOST_ID%</div>
-            <div id="proxy-prefix-id" style="display: none">%PROXY_PREFIX_ENABLED%</div>
-            <p style="margin-inline-end: auto;"><span dir="ltr">Copyright © _YEAR_, VENDOR.</span></p>
+            <div id="wopi-host-id">%WOPI_HOST_ID%</div>
+            <div id="proxy-prefix-id">%PROXY_PREFIX_ENABLED%</div>
+            <p class="about-dialog-info-div"><span dir="ltr">Copyright © _YEAR_, VENDOR.</span></p>
           </div>
         </div>
       </div>
