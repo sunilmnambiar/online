@@ -510,7 +510,7 @@ function createShapesPanel(shapeType) {
 	grid.onclick = function(e) {
 		map.sendUnoCommand('.uno:' + e.target.dataset.uno);
 		map._docLayer._closeMobileWizard();
-	}
+	};
 
 	wrapper.appendChild(grid);
 
